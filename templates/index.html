@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengali Sign Language Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>বাংলা সাইন ল্যাঙ্গুয়েজ রিকগনিশন</h1>
+            <p>Bengali Sign Language Recognition System</p>
+            <p class="subtitle">AI-Powered Real-time Detection</p>
+        </header>
+
+        <div class="content">
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('upload')">
+                    📤 Upload Image
+                </button>
+                <button class="tab" onclick="switchTab('webcam')">
+                    📹 Live Webcam
+                </button>
+            </div>
+
+            <!-- Upload Image Tab -->
+            <div id="upload-tab" class="tab-content active">
+                <div class="upload-section" onclick="document.getElementById('file-input').click()">
+                    <div class="upload-icon">📸</div>
+                    <p class="upload-text">Click to upload an image</p>
+                    <p class="upload-subtext">or drag and drop here</p>
+                    <p class="upload-formats">Supports: JPG, PNG, JPEG</p>
+                </div>
+                <input type="file" id="file-input" accept="image/*" style="display: none;">
+
+                <div class="preview-container" id="preview-container" style="display: none;">
+                    <img id="preview-image" alt="Preview">
+                    <button class="btn btn-primary" onclick="predictImage()">
+                        🔍 Recognize Sign
+                    </button>
+                </div>
+            </div>
+
+            <!-- Webcam Tab -->
+            <div id="webcam-tab" class="tab-content">
+                <div class="webcam-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <div class="webcam-controls">
+                        <button class="btn btn-success" id="start-webcam" onclick="startWebcam()">
+                            ▶️ Start Camera
+                        </button>
+                        <button class="btn btn-primary" id="capture-btn" onclick="captureFrame()" style="display: none;">
+                            📸 Capture & Recognize
+                        </button>
+                        <button class="btn btn-danger" id="stop-webcam" onclick="stopWebcam()" style="display: none;">
+                            ⏹️ Stop Camera
+                        </button>
+                    </div>
+                </div>
+                <canvas id="canvas" style="display: none;"></canvas>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing sign language...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error" id="error"></div>
+
+            <!-- Results Section -->
+            <div class="results" id="results">
+                <h2>🎯 Recognition Results</h2>
+                <div id="predictions"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ using TensorFlow & Flask</p>
+            <p>Accuracy: 99.50% | Model: Custom CNN</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

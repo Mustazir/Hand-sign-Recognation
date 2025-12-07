@@ -1,0 +1,21 @@
+# Virtual environments
+venv/
+venv310/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model (if too large for GitHub)
+# custom_model_temp.h5
