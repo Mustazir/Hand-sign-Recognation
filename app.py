@@ -24,20 +24,26 @@ CLASS_NAMES = [
 ]
 
 # ============================================================================
-# LOAD MODEL
+# LAZY LOAD MODEL (Memory optimization for free tier)
 # ============================================================================
-print("\n" + "="*60)
-print("LOADING MODEL...")
-print("="*60)
+model = None
 
-try:
-    model = tf.keras.models.load_model(MODEL_PATH)
-    print(f"✓ Model loaded successfully from: {MODEL_PATH}")
-    print(f"✓ Number of classes: {len(CLASS_NAMES)}")
-except Exception as e:
-    print(f"✗ ERROR loading model: {e}")
-    print(f"✗ Make sure '{MODEL_PATH}' is in the same folder as app.py")
-    model = None
+def load_model():
+    """Load model only when needed"""
+    global model
+    if model is None:
+        print("\n" + "="*60)
+        print("LOADING MODEL...")
+        print("="*60)
+        try:
+            model = tf.keras.models.load_model(MODEL_PATH)
+            print(f"✓ Model loaded successfully from: {MODEL_PATH}")
+            print(f"✓ Number of classes: {len(CLASS_NAMES)}")
+        except Exception as e:
+            print(f"✗ ERROR loading model: {e}")
+            print(f"✗ Make sure '{MODEL_PATH}' is in the same folder as app.py")
+            raise e
+    return model
 
 # ============================================================================
 # PREPROCESSING FUNCTION
@@ -66,10 +72,10 @@ def preprocess_image(image):
 # ============================================================================
 def predict_sign(image):
     """Predict sign language from image"""
-    if model is None:
-        return {"error": "Model not loaded. Please check server logs."}
-
     try:
+        # Load model lazily
+        model = load_model()
+
         # Preprocess image
         processed = preprocess_image(image)
 
@@ -179,4 +185,12 @@ def health():
 # ============================================================================
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+    print("\n" + "="*60)
+    print("BENGALI SIGN LANGUAGE RECOGNITION - WEB SERVER")
+    print("="*60)
+    print(f"\n✓ Server starting on port {port}...")
+    print("✓ Model will load on first prediction request")
+    print("\n✓ Press Ctrl+C to stop the server\n")
+    print("="*60 + "\n")
+
     app.run(debug=False, host='0.0.0.0', port=port)
